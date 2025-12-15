@@ -8,10 +8,20 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 // Configure Entity Framework
+// Use InMemory database if LocalDB is not available (e.g., in Linux environments)
+var connectionString = builder.Configuration.GetConnectionString("WingtipToys");
 builder.Services.AddDbContext<ProductContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("WingtipToys") ?? 
-        "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=WingtipToys;Integrated Security=True"));
+{
+    if (!string.IsNullOrEmpty(connectionString) && !connectionString.Contains("localdb", StringComparison.OrdinalIgnoreCase))
+    {
+        options.UseSqlServer(connectionString);
+    }
+    else
+    {
+        // Fallback to InMemory database for development/testing
+        options.UseInMemoryDatabase("WingtipToys");
+    }
+});
 
 // Add session support
 builder.Services.AddDistributedMemoryCache();
