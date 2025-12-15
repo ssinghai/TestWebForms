@@ -1,0 +1,69 @@
+@using WingtipToys.Data
+@inject ProductContext DbContext
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Wingtip Toys</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" asp-page="/Index">WingtipToys</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/About">About</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
+                    <li><a asp-page="/ProductList">Products</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="TitleContent" style="text-align: center">
+        <a asp-page="/Index">
+            <img src="~/Images/logo.jpg" alt="Wingtip Toys Logo" style="border-style: none" />
+        </a>  
+        <br />  
+    </div>
+    <div id="CategoryMenu" style="text-align: center">
+        @{
+            var categories = DbContext.Categories.ToList();
+            for (int i = 0; i < categories.Count; i++)
+            {
+                var category = categories[i];
+                <a href="/ProductList?id=@category.CategoryID">@category.CategoryName</a>
+                if (i < categories.Count - 1)
+                {
+                    @:  |  
+                }
+            }
+        }
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - Wingtip Toys</p>
+        </footer>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

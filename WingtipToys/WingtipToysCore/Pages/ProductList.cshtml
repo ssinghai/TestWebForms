@@ -1,0 +1,70 @@
+@page
+@model WingtipToys.Pages.ProductListModel
+@{
+    ViewData["Title"] = "Products";
+}
+
+<section>
+    <div>
+        <hgroup>
+            <h2>@ViewData["Title"]</h2>
+        </hgroup>
+
+        @if (Model.Products != null && Model.Products.Any())
+        {
+            <table style="width:100%;">
+                <tbody>
+                    @for (int i = 0; i < Model.Products.Count; i += 4)
+                    {
+                        <tr>
+                            @for (int j = i; j < Math.Min(i + 4, Model.Products.Count); j++)
+                            {
+                                var product = Model.Products[j];
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td> 
+                                                <a href="/ProductDetails?productID=@product.ProductID">
+                                                    <img src="/Catalog/Images/Thumbs/@product.ImagePath" width="100" height="75" style="border: solid" alt="@product.ProductName" />
+                                                </a> 
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td> 
+                                                <a href="/ProductDetails?productID=@product.ProductID"> 
+                                                    <span>@product.ProductName</span> 
+                                                </a> 
+                                                <br /> 
+                                                <span> 
+                                                    <b>Price: </b>@string.Format("{0:c}", product.UnitPrice)
+                                                </span> 
+                                                <br /> 
+                                                <a href="/AddToCart?productID=@product.ProductID">
+                                                    <span class="ProductListItem">
+                                                        <b>Add to Cart</b>
+                                                    </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            }
+                            @* Fill empty cells if row is not complete *@
+                            @for (int k = 0; k < (4 - Math.Min(4, Model.Products.Count - i)); k++)
+                            {
+                                <td></td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>No data was returned.</p>
+        }
+    </div>
+</section>

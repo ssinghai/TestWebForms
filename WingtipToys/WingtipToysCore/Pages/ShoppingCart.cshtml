@@ -1,0 +1,61 @@
+@page
+@model WingtipToys.Pages.ShoppingCartModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div id="ShoppingCartTitle" class="ContentHead">
+    <h1>@(Model.CartItems.Any() ? "Shopping Cart" : "Shopping Cart is Empty")</h1>
+</div>
+
+@if (Model.CartItems.Any())
+{
+    <form method="post">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Price (each)</th>
+                    <th>Quantity</th>
+                    <th>Item Total</th>
+                    <th>Remove Item</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.CartItems.Count; i++)
+                {
+                    var item = Model.CartItems[i];
+                    <tr>
+                        <td>@item.ProductId</td>
+                        <td>@item.Product?.ProductName</td>
+                        <td>@string.Format("{0:c}", item.Product?.UnitPrice)</td>
+                        <td>
+                            <input type="number" name="CartItems[@i].Quantity" value="@item.Quantity" min="0" style="width: 60px" />
+                            <input type="hidden" name="CartItems[@i].ProductId" value="@item.ProductId" />
+                        </td>
+                        <td>@string.Format("{0:c}", (item.Quantity * (item.Product?.UnitPrice ?? 0)))</td>
+                        <td>
+                            <input type="checkbox" name="CartItems[@i].Remove" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div>
+            <p></p>
+            <strong>
+                Order Total: @string.Format("{0:c}", Model.Total)
+            </strong> 
+        </div>
+        <br />
+        <table> 
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+}

@@ -1,0 +1,33 @@
+@page
+@model WingtipToys.Pages.ProductDetailsModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+@if (Model.Product != null)
+{
+    <div>
+        <h1>@Model.Product.ProductName</h1>
+    </div>
+    <br />
+    <table>
+        <tr>
+            <td>
+                <img src="/Catalog/Images/@Model.Product.ImagePath" style="border:solid; height:300px" alt="@Model.Product.ProductName"/>
+            </td>
+            <td>&nbsp;</td>  
+            <td style="vertical-align: top; text-align:left;">
+                <b>Description:</b><br />@Model.Product.Description
+                <br />
+                <span><b>Price:</b>&nbsp;@string.Format("{0:c}", Model.Product.UnitPrice)</span>
+                <br />
+                <span><b>Product Number:</b>&nbsp;@Model.Product.ProductID</span>
+                <br />
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    <p>Product not found.</p>
+}
